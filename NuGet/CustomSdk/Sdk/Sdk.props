@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <UsingCustomSdk>true</UsingCustomSdk>
+    <IntermediateOutputDirectory>obj\</IntermediateOutputDirectory>
+    <LoggingVerbosity Condition="$(LoggingVerbosity) == ''">normal</LoggingVerbosity>
+    <CscPath>$([System.IO.Path]::GetFullPath('../CanSomeoneCode/CanSomeoneCode/bin/Release/net6.0/win-x64/publish/csc.exe'))</CscPath>
+    <ConcatFile>$(IntermediateOutputDirectory)fullteam.coders</ConcatFile>
+  </PropertyGroup>
+
+    <ItemGroup>
+        <Coders Include="**\*.coder" Exclude="$(IntermediateOutputDirectory)*.coder"/>
+    </ItemGroup>
+</Project>
