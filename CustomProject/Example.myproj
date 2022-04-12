@@ -1,3 +1,27 @@
 <Project>
     
+   <PropertyGroup>
+        <CscPath>$([System.IO.Path]::GetFullPath('../CanSomeoneCode/CanSomeoneCode/bin/Release/net6.0/win-x64/publish/csc.exe'))</CscPath>
+   </PropertyGroup>
+
+    <ItemGroup>
+        <Coders Include="**\*.coder" />
+    </ItemGroup>
+
+    <Target Name="Build">
+        <Message Text="Starting build" Importance="normal" />
+
+        <ReadLinesFromFile File="%(Coders.Identity)">
+            <Output
+                TaskParameter="Lines"
+                ItemName="ItemsFromFile"/>
+        </ReadLinesFromFile>
+
+        <Message Text="Using CSC $(CscPath)" Importance="normal" />
+
+        <Exec Command="$(CscPath) --coder &quot;%(ItemsFromFile.Identity)&quot;" 
+              ConsoleToMsBuild="false"
+              EchoOff="true"
+        />
+    </Target>
 </Project>
