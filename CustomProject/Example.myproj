@@ -1,3 +1,52 @@
 <Project>
-    
+  <PropertyGroup>
+    <CscPath>$([System.IO.Path]::GetFullPath('../CoderStringConcat/CoderStringConcat.Cli/bin/Release/net8.0/win-x64/publish/csc.exe'))</CscPath>
+    <OutputFile>Concat.txt</OutputFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Coders Include="**\*.coder" />
+    <Coders Remove="team3.coder" />
+  </ItemGroup>
+
+  <Target Name="Build">
+    <Message Text="Starting build" Importance="normal" />
+
+    <!-- 
+        In general you should use BeforeTargets/AfterTargets rather than CallTarget.
+     -->
+    <!-- <CallTarget Targets="BuildWithBatching" /> -->
+    <!-- <CallTarget Targets="BuildWithTransform" /> -->
+  </Target>
+
+  <Target Name="BuildWithBatching">
+    <ReadLinesFromFile File="%(Coders.Identity)">
+        <Output
+            TaskParameter="Lines"
+            ItemName="ItemsFromFile"/>
+    </ReadLinesFromFile>
+    <Message Text="Build with batching; using CSC $(CscPath)" Importance="high" />
+    <!-- 
+    Example of batching. This is invoked once for each item.
+    https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-batching?view=vs-2022&WT.mc_id=DT-MVP-5003472
+    -->
+    <Exec Command="$(CscPath) --coders &quot;%(ItemsFromFile.Identity)&quot; --output &quot;$(OutputFile)&quot;" 
+          ConsoleToMsBuild="false"
+          EchoOff="true"
+    />
+  </Target>
+
+  <Target Name="BuildWithTransform">
+    <Message Text="Build with transform; using CSC $(CscPath)" Importance="high" />
+
+    <!--
+    Example of transforming items using metadata.
+    https://learn.microsoft.com/visualstudio/msbuild/msbuild-items?view=vs-2022&WT.mc_id=DT-MVP-5003472#BKMK_Transforming
+    -->
+    <Exec Command="$(CscPath) @(ItemsFromFile -> '--coders &quot;%(Identity)&quot;', ' ') --output &quot;$(OutputFile)&quot;" 
+        ConsoleToMsBuild="false"
+        EchoOff="true"
+    />
+  </Target>
+
 </Project>
