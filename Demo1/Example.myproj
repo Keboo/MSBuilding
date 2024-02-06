@@ -1,0 +1,51 @@
+<Project>
+  <PropertyGroup>
+    <!-- 
+      There are many common .NET functions that be directly invoked inside of MSBuild.
+      https://learn.microsoft.com/visualstudio/msbuild/property-functions?WT.mc_id=DT-MVP-5003472
+    -->
+    <CscPath>$([System.IO.Path]::GetFullPath('../CoderStringConcat/CoderStringConcat.Cli/bin/Release/net8.0/win-x64/publish/csc.exe'))</CscPath> 
+    <OutputFile>Concat.txt</OutputFile> 
+  </PropertyGroup> 
+ 
+  <ItemGroup>
+    <Coders Include="**\*.coder" /> 
+    <Coders Remove="team3.coder" /> 
+  </ItemGroup> 
+ 
+  <Target Name="Build"> 
+    <Message Text="Starting build" Importance="high" /> 
+    <!--  
+      In general you should use BeforeTargets/AfterTargets rather than CallTarget. 
+      This is here for demo purposes for directly invoking a target
+    --> 
+    <CallTarget Targets="CompileCoders" />
+  </Target> 
+ 
+  <Target Name="CompileCoders">
+    <!--  
+      Example of batching. This is invoked once for each item. 
+      https://learn.microsoft.com/visualstudio/msbuild/msbuild-batching?WT.mc_id=DT-MVP-5003472 
+    --> 
+    <ReadLinesFromFile File="%(Coders.Identity)"> 
+      <Output 
+          TaskParameter="Lines" 
+          ItemName="ItemsFromFile"/> 
+    </ReadLinesFromFile> 
+
+    <Message Text="Build using CSC $(CscPath)" Importance="high" /> 
+ 
+    <!-- 
+      Example of transforming items using metadata. 
+      https://learn.microsoft.com/visualstudio/msbuild/msbuild-items?WT.mc_id=DT-MVP-5003472#BKMK_Transforming
+
+      There are also item functions that can be leveraged as well:
+      https://learn.microsoft.com/visualstudio/msbuild/item-functions?WT.mc_id=DT-MVP-5003472
+    --> 
+    <Exec Command="$(CscPath) @(ItemsFromFile -> '--coders &quot;%(Identity)&quot;', ' ') --output &quot;$(OutputFile)&quot;"  
+        ConsoleToMsBuild="false" 
+        EchoOff="true" 
+    /> 
+  </Target> 
+ 
+</Project>

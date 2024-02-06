@@ -3,10 +3,10 @@
 <Project DefaultTargets="Build">
   <!-- 
     This loads a custom task rather than relying on executing a CLI app.
-    https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022&WT.mc_id=DT-MVP-5003472
+    https://learn.microsoft.com/visualstudio/msbuild/tutorial-custom-task-code-generation?WT.mc_id=DT-MVP-5003472
 
     $(MSBuildThisFileDirectory) is one of the well-known metadata values
-    https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-reserved-and-well-known-properties?view=vs-2022&WT.mc_id=DT-MVP-5003472
+    https://learn.microsoft.com/visualstudio/msbuild/msbuild-reserved-and-well-known-properties?WT.mc_id=DT-MVP-5003472
   -->
   <UsingTask TaskName="CoderStringConcat.Build.CscTask" AssemblyFile="$(MSBuildThisFileDirectory)..\build\CoderStringConcat.Build.dll"/>
 
@@ -16,14 +16,14 @@
 
   <Target Name="EnsureOutputDirectory" BeforeTargets="Build">
     <!--
-    https://learn.microsoft.com/visualstudio/msbuild/makedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472 
+    https://learn.microsoft.com/visualstudio/msbuild/makedir-task?WT.mc_id=DT-MVP-5003472 
     -->
     <MakeDir Directories="$(OutputDirectory)" />
   </Target>
 
   <!--
   Inputs and Outputs allow for incremental builds
-  https://learn.microsoft.com/en-us/visualstudio/msbuild/how-to-build-incrementally?view=vs-2022&WT.mc_id=DT-MVP-5003472
+  https://learn.microsoft.com/visualstudio/msbuild/how-to-build-incrementally?WT.mc_id=DT-MVP-5003472
   -->
   <Target Name="Build" Inputs="@(Coders)" Outputs="$(OutputFile)">
     <Message Text="Build with using CSC $(CscPath)" Importance="$(LoggingVerbosity)" />
@@ -41,7 +41,7 @@
   <Target Name="Clean">
     <Message Text="In Clean: Removing $(OutputDirectory)" Importance="$(LoggingVerbosity)" />
     <!--
-    https://learn.microsoft.com/visualstudio/msbuild/removedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472
+    https://learn.microsoft.com/visualstudio/msbuild/removedir-task?WT.mc_id=DT-MVP-5003472
     -->
     <RemoveDir Directories="$(OutputDirectory)" />
   </Target>

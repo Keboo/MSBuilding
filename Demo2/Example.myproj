@@ -1,0 +1,59 @@
+<!--  
+The DefaultTarget="Build" is the default you will get with `dotnet build`.
+This shows how to specify your own DefaultTarget. This is the default target specified when running dotnet build.
+This is one way to control the targets order.
+https://learn.microsoft.com/visualstudio/msbuild/target-build-order?WT.mc_id=DT-MVP-5003472 
+--> 
+<Project DefaultTargets="Build" InitialTargets="Init">
+  <PropertyGroup>
+    <OutputDirectory>bin\</OutputDirectory>
+    <CscPath>$([System.IO.Path]::GetFullPath('../CoderStringConcat/CoderStringConcat.Cli/bin/Release/net8.0/win-x64/publish/csc.exe'))</CscPath> 
+    <OutputFile>$(OutputDirectory)Concat.txt</OutputFile> 
+  </PropertyGroup> 
+ 
+  <ItemGroup> 
+    <Coders Include="**\*.coder" />  
+    <Coders Remove="team3.coder" /> 
+  </ItemGroup> 
+ 
+  <Target Name="Init">
+    <Message Text="Initialized CSC" Importance="high" />
+  </Target>
+
+  <Target Name="BeforeBuild" BeforeTargets="Build">
+    <Message Text="Before build" Importance="high" />
+  </Target> 
+ 
+  <Target Name="EnsureOutputDirectory" BeforeTargets="Build">
+    <MakeDir Directories="$(OutputDirectory)" /> 
+  </Target> 
+ 
+  <!-- 
+    Inputs and Outputs allow for incremental builds 
+    https://learn.microsoft.com/visualstudio/msbuild/how-to-build-incrementally?WT.mc_id=DT-MVP-5003472 
+  --> 
+  <Target Name="Build" Inputs="@(Coders)" Outputs="$(OutputFile)">
+    <ReadLinesFromFile File="%(Coders.Identity)"> 
+      <Output 
+          TaskParameter="Lines" 
+          ItemName="ItemsFromFile"/> 
+    </ReadLinesFromFile>
+
+    <Message Text="Build with using CSC $(CscPath)" Importance="high" /> 
+ 
+    <Exec Command="$(CscPath) @(ItemsFromFile -> '--coders &quot;%(Identity)&quot;', ' ') --output &quot;$(OutputFile)&quot;"  
+        ConsoleToMsBuild="false" 
+        EchoOff="true" 
+    /> 
+  </Target> 
+ 
+  <Target Name="AfterBuild" AfterTargets="Build">  
+    <Message Text="After build" Importance="high" />  
+  </Target>  
+ 
+  <Target Name="Clean"> 
+    <Message Text="In Clean: Removing $(OutputDirectory)" Importance="high" /> 
+    <!-- https://learn.microsoft.com/visualstudio/msbuild/removedir-task?WT.mc_id=DT-MVP-5003472 --> 
+    <RemoveDir Directories="$(OutputDirectory)" />  
+  </Target>  
+</Project>

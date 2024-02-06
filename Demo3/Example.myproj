@@ -1,0 +1,5 @@
+<Project Sdk="CustomSdk/1.0.0">
+  <ItemGroup>
+    <Coders Remove="team3.coder" />
+  </ItemGroup>
+</Project>
