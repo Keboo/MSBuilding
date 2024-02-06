@@ -1,42 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Project DefaultTargets="Build">
+  <!-- 
+    This loads a custom task rather than relying on executing a CLI app.
+    https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022&WT.mc_id=DT-MVP-5003472
+
+    $(MSBuildThisFileDirectory) is one of the well-known metadata values
+    https://learn.microsoft.com/en-us/visualstudio/msbuild/msbuild-reserved-and-well-known-properties?view=vs-2022&WT.mc_id=DT-MVP-5003472
+  -->
+  <UsingTask TaskName="CoderStringConcat.Build.CscTask" AssemblyFile="$(MSBuildThisFileDirectory)..\build\CoderStringConcat.Build.dll"/>
+
   <Target Name="BeforeBuild" BeforeTargets="Build">
-      <Message Text="Before build" Importance="$(LoggingVerbosity)" />
+    <Message Text="Before build" Importance="$(LoggingVerbosity)" />
   </Target>
 
-  <Target Name="CompileCoders" Inputs="@(Coders)" Outputs="$(ConcatFile)" BeforeTargets="ReadCoders">
-    <ReadLinesFromFile File="%(Coders.Identity)">
-        <Output
-            TaskParameter="Lines"
-            ItemName="ItemsFromFile"/>
-    </ReadLinesFromFile>
-    <WriteLinesToFile File="$(ConcatFile)" Lines="@(ItemsFromFile)" Overwrite="true" />
+  <Target Name="EnsureOutputDirectory" BeforeTargets="Build">
+    <!--
+    https://learn.microsoft.com/visualstudio/msbuild/makedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472 
+    -->
+    <MakeDir Directories="$(OutputDirectory)" />
   </Target>
 
-  <Target Name="ReadCoders" BeforeTargets="Build"> 
-      <ReadLinesFromFile File="$(ConcatFile)">
-          <Output
-              TaskParameter="Lines"
-              ItemName="AllCoders"/>
-      </ReadLinesFromFile>
-  </Target>
+  <!--
+  Inputs and Outputs allow for incremental builds
+  https://learn.microsoft.com/en-us/visualstudio/msbuild/how-to-build-incrementally?view=vs-2022&WT.mc_id=DT-MVP-5003472
+  -->
+  <Target Name="Build" Inputs="@(Coders)" Outputs="$(OutputFile)">
+    <Message Text="Build with using CSC $(CscPath)" Importance="$(LoggingVerbosity)" />
 
-  <Target Name="Build">
-      <Message Text="Building $(CscPath)" Importance="$(LoggingVerbosity)" />
-      
-      <Exec Command="$(CscPath) --coder &quot;%(AllCoders.Identity)&quot;" 
-            ConsoleToMsBuild="false"
-            EchoOff="true"
-      /> 
+    <CscTask
+      CoderFiles="@(Coders)"
+      OutputFile="$(OutputFile)"
+    />
   </Target>
 
   <Target Name="AfterBuild" AfterTargets="Build">
-      <Message Text="After build" Importance="$(LoggingVerbosity)" />
+    <Message Text="After build" Importance="$(LoggingVerbosity)" />
   </Target>
 
-
   <Target Name="Clean">
-    <RemoveDir Directories="$(IntermediateOutputDirectory)" />
+    <Message Text="In Clean: Removing $(OutputDirectory)" Importance="$(LoggingVerbosity)" />
+    <!--
+    https://learn.microsoft.com/visualstudio/msbuild/removedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472
+    -->
+    <RemoveDir Directories="$(OutputDirectory)" />
   </Target>
 </Project>

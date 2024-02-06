@@ -7,9 +7,16 @@
     <license type="expression">MIT</license>
     <licenseUrl>https://licenses.nuget.org/MIT</licenseUrl>
     <description>Example of a custom MSBuild SDK.</description>
+    <readme>README.md</readme>
     <tags>MSBuild MSBuildSdk</tags>
     <packageTypes>
       <packageType name="MSBuildSdk" />
     </packageTypes>
   </metadata>
+  <files>
+    <file src="README.md" />
+    <file src="Sdk\*" target="Sdk" />
+    <file src="..\..\CoderStringConcat\CoderStringConcat.Build\bin\Release\netstandard2.0\publish\*" target="build" />
+
+  </files>
 </package>

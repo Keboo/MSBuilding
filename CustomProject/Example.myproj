@@ -1,50 +1,5 @@
-<!-- 
-The DefaultTarget="Build" is the default you will get with `dotnet build`. 
-This shows how to specify your own DefaultTarget.
-This is one way to control the targets order.
-https://learn.microsoft.com/visualstudio/msbuild/target-build-order?view=vs-2022&WT.mc_id=DT-MVP-5003472
--->
-<Project DefaultTargets="Build">
-  <PropertyGroup>
-    <OutputDirectory>bin\</OutputDirectory> 
-    <CscPath>$([System.IO.Path]::GetFullPath('../CoderStringConcat/CoderStringConcat.Cli/bin/Release/net8.0/win-x64/publish/csc.exe'))</CscPath>
-    <OutputFile>$(OutputDirectory)Concat.txt</OutputFile>
-  </PropertyGroup>
-
+<Project Sdk="CustomSdk/1.0.0">
   <ItemGroup>
-    <Coders Include="**\*.coder" /> 
     <Coders Remove="team3.coder" />
   </ItemGroup>
-
-  <Target Name="BeforeBuild" BeforeTargets="Build"> 
-    <Message Text="Before build" Importance="high" /> 
-  </Target>
-
-  <Target Name="EnsureOutputDirectory" BeforeTargets="Build">
-    <!-- https://learn.microsoft.com/visualstudio/msbuild/makedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472 -->
-    <MakeDir Directories="$(OutputDirectory)" />
-  </Target>
-
-  <!--
-    Inputs and Outputs allow for incremental builds
-    https://learn.microsoft.com/en-us/visualstudio/msbuild/how-to-build-incrementally?view=vs-2022&WT.mc_id=DT-MVP-5003472
-  -->
-  <Target Name="Build" Inputs="@(Coders)" Outputs="$(OutputFile)">
-    <Message Text="Build with using CSC $(CscPath)" Importance="high" />
-
-    <Exec Command="$(CscPath) @(ItemsFromFile -> '--coders &quot;%(Identity)&quot;', ' ') --output &quot;$(OutputFile)&quot;" 
-        ConsoleToMsBuild="false"
-        EchoOff="true"
-    />
-  </Target>
-
-  <Target Name="AfterBuild" AfterTargets="Build"> 
-    <Message Text="After build" Importance="high" /> 
-  </Target> 
-
-  <Target Name="Clean">
-    <Message Text="In Clean: Removing $(OutputDirectory)" Importance="high" />
-    <!-- https://learn.microsoft.com/visualstudio/msbuild/removedir-task?view=vs-2022&WT.mc_id=DT-MVP-5003472 -->
-    <RemoveDir Directories="$(OutputDirectory)" /> 
-  </Target> 
 </Project>

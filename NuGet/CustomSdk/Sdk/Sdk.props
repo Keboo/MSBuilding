@@ -2,14 +2,14 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <UsingCustomSdk>true</UsingCustomSdk>
-    <IntermediateOutputDirectory>obj\</IntermediateOutputDirectory>
-    <LoggingVerbosity Condition="$(LoggingVerbosity) == ''">normal</LoggingVerbosity>
-    <CscPath>$([System.IO.Path]::GetFullPath('../CanSomeoneCode/CanSomeoneCode/bin/Release/net6.0/win-x64/publish/csc.exe'))</CscPath>
-    <ConcatFile>$(IntermediateOutputDirectory)fullteam.coders</ConcatFile>
+    <OutputDirectory>bin\</OutputDirectory> 
+    <CscPath>$([System.IO.Path]::GetFullPath('../CoderStringConcat/CoderStringConcat.Cli/bin/Release/net8.0/win-x64/publish/csc.exe'))</CscPath>
+    <OutputFile>$(OutputDirectory)Concat.txt</OutputFile>
+    <LoggingVerbosity Condition="$(LoggingVerbosity) == ''">high</LoggingVerbosity>
   </PropertyGroup>
 
-    <ItemGroup>
-        <Coders Include="**\*.coder" Exclude="$(IntermediateOutputDirectory)*.coder"/>
-    </ItemGroup>
+  <ItemGroup>
+    <Coders Include="**\*.coder" />
+  </ItemGroup>
+
 </Project>
