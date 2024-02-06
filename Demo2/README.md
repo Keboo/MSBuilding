@@ -12,7 +12,7 @@ dotnet clean
 ```
 
 ## Points of interest
-The most important concept in this demo is the [target ordering](https://learn.microsoft.com/visualstudio/msbuild/target-build-order?WT.mc_id=DT-MVP-5003472) that occurs by setting the BeforeTargets/AfterTargets attributes. In addtion, take note of the `DefaultTargets` and `InitialTargets` specified on the root Project element.
+The most important concept in this demo is the [target ordering](https://learn.microsoft.com/visualstudio/msbuild/target-build-order?WT.mc_id=DT-MVP-5003472) that occurs by setting the BeforeTargets/AfterTargets attributes. In addition, take note of the `DefaultTargets` and `InitialTargets` specified on the root Project element.
 
 You may notice that when running `dotnet build` you see the output "Initialized CSC" twice. This is because the default behavior of `dotnet build` is to first call the "Restore" target, then call the "Build" target. If you wish to disable the first call, you can append `--no-build` to the `dotnet build` command.
 

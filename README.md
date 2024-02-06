@@ -6,7 +6,7 @@ This is a simple learning project showing the capabilities of MSBuild.
 - [NuGet CLI](https://www.nuget.org/downloads)
 
 # Compile and run the demos
-There is a Build.ps1 stript that will compile everything needed. This script assumes that the working directory is the root of the repository.
+Before running any of the demos, run the `Build.ps1` script that will compile everything needed. This script assumes that the working directory is the root of the repository.
 
 Alternatively you can compile individual components as described below.
 
@@ -14,12 +14,12 @@ Each Demo contains its own README file with direction for running it as well as 
 
 For all of the demo app commands you can attach the `-bl` switch to the end of the command to generate a binary log file. This can be opened and viewed with the tools linked below and is invaluable when debugging the MSBuild process. More details on these log files can be found [here](https://msbuildlog.com/)
 
-Addtionally all of the commands can be modified with the verbosity option (`-v` or `--verbosity`) to see more or less output. The allowed values are: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
+Additionally all of the commands can be modified with the verbosity option (`-v` or `--verbosity`) to see more or less output. The allowed values are: q[uiet], m[inimal], n[ormal], d[etailed], and diag[nostic].
 
 ## Compiling CoderStringConcat
 From the root of the repository run `dotnet publish CoderStringConcat`. The .NET 8 SDK will default the configuration of the command to be "Release".
 
-## Compileing the CustomSdk/NuGet package
+## Compiling the CustomSdk/NuGet package
 There is a build script `./NuGet/Build.ps1` that can be used to compile the NuGet package.
 Before running this the `CoderStringConcat` solution must be published (see above).
 This script will also remove any prior versions of the CustomSdk NuGet package from your NuGet cache. It assumes the default cache location of `$env:USERPROFILE\.nuget`
