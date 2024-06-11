@@ -30,7 +30,7 @@ This script will also remove any prior versions of the CustomSdk NuGet package f
 - [MSBuild Task Reference](https://learn.microsoft.com/visualstudio/msbuild/msbuild-task-reference?WT.mc_id=DT-MVP-5003472)
 - [MSBuild repository](https://github.com/dotnet/msbuild)
 - [MSBuildSdks](https://github.com/microsoft/MSBuildSdks)
-- [Customize you build](https://learn.microsoft.com/visualstudio/msbuild/customize-your-build?WT.mc_id=DT-MVP-5003472)
+- [Customize your build](https://learn.microsoft.com/visualstudio/msbuild/customize-your-build?WT.mc_id=DT-MVP-5003472)
 - [Customize build by folder](https://learn.microsoft.com/visualstudio/msbuild/customize-by-directory?WT.mc_id=DT-MVP-5003472)
 
 ## Tools
